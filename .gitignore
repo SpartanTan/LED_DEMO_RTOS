@@ -1,0 +1,19 @@
+# build outputs
+build/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# CubeMX generated temp
+*.ioc_backup
+
+# IDE（如果未来误用）
+
+# system
+.DS_Store
+Thumbs.db
+.codex
