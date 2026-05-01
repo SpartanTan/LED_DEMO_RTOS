@@ -1,0 +1,32 @@
+BasedOnStyle: LLVM
+
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+ColumnLimit: 0
+ReflowComments: false
+
+AllowShortIfStatementsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+BreakBeforeBraces: Allman
+
+PointerAlignment: Right
+
+SortIncludes: false
+IncludeBlocks: Preserve
+
+IndentCaseLabels: true
+
+SpacesInParentheses: false
+
+SpaceBeforeParens: ControlStatements
+
+AlignConsecutiveAssignments: false
+
+AlignConsecutiveDeclarations: false
+AlignAfterOpenBracket: Align
+AlignOperands: Align
