@@ -25,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "interrupt_demo.h"
 #include "tim.h"
 #include "delay.h"
 /* USER CODE END Includes */
@@ -51,9 +52,9 @@
 /* Definitions for flipIntrpTask */
 osThreadId_t flipIntrpTaskHandle;
 const osThreadAttr_t flipIntrpTask_attributes = {
-    .name = "flipIntrpTask",
-    .stack_size = 128 * 4,
-    .priority = (osPriority_t)osPriorityNormal,
+  .name = "flipIntrpTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -144,30 +145,7 @@ void MX_FREERTOS_Init(void) {
 void StartFlipIntrpTask(void *argument)
 {
   /* USER CODE BEGIN StartFlipIntrpTask */
-  /* Set Priority of TIM3 to 4 */
-  HAL_NVIC_SetPriority(TIM3_IRQn, 4, 0);
-  HAL_TIM_Base_Start_IT(&htim3);
-  HAL_TIM_Base_Start_IT(&htim5);
-  /* Infinite loop */
-  uint32_t num = 0;
-
-  while (1)
-  {
-    if (++num == 5)
-    {
-      printf("FreeRTOS Disable Interrupt! \r\n");
-      portDISABLE_INTERRUPTS(); /* FreeRTOS关闭中断 */
-
-      delay_busy_ms(5000);      // delay 5s
-      
-      portENABLE_INTERRUPTS(); /* FreeRTOS打开中断 */
-      printf("FreeRTOS Enable Interrupt!\r\n");
-      
-      num = 0;
-    }
-
-    osDelay(1000);
-  }
+  interrupt_demo_task(argument);
   /* USER CODE END StartFlipIntrpTask */
 }
 
