@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -88,6 +89,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM3_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -173,7 +176,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  else if (htim->Instance == TIM3)
+  {
+    HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+  }
+  else if (htim->Instance == TIM5)
+  {
+    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+  }
   /* USER CODE END Callback 1 */
 }
 

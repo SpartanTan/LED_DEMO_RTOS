@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "tim.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,19 +48,12 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for led0Task */
-osThreadId_t led0TaskHandle;
-const osThreadAttr_t led0Task_attributes = {
-  .name = "led0Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
-/* Definitions for led1Task */
-osThreadId_t led1TaskHandle;
-const osThreadAttr_t led1Task_attributes = {
-  .name = "led1Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+/* Definitions for flipIntrpTask */
+osThreadId_t flipIntrpTaskHandle;
+const osThreadAttr_t flipIntrpTask_attributes = {
+    .name = "flipIntrpTask",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t)osPriorityNormal,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,8 +61,7 @@ const osThreadAttr_t led1Task_attributes = {
 
 /* USER CODE END FunctionPrototypes */
 
-void StartLed0Task(void *argument);
-void StartLed1Task(void *argument);
+void StartFlipIntrpTask(void* argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -128,11 +121,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of led0Task */
-  led0TaskHandle = osThreadNew(StartLed0Task, NULL, &led0Task_attributes);
-
-  /* creation of led1Task */
-  led1TaskHandle = osThreadNew(StartLed1Task, NULL, &led1Task_attributes);
+  /* creation of flipIntrpTask */
+  flipIntrpTaskHandle = osThreadNew(StartFlipIntrpTask, NULL, &flipIntrpTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -144,42 +134,38 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartLed0Task */
+/* USER CODE BEGIN Header_StartFlipIntrpTask */
 /**
-  * @brief  Function implementing the led0Task thread.
+  * @brief  Function implementing the flipIntrpTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartLed0Task */
-void StartLed0Task(void *argument)
+/* USER CODE END Header_StartFlipIntrpTask */
+void StartFlipIntrpTask(void* argument)
 {
-  /* USER CODE BEGIN StartLed0Task */
+  /* USER CODE BEGIN StartFlipIntrpTask */
+  /* Set Priority of TIM3 to 4 */
+  HAL_NVIC_SetPriority(TIM3_IRQn, 4, 0);
+  HAL_TIM_Base_Start_IT(&htim3);
+  HAL_TIM_Base_Start_IT(&htim5);
   /* Infinite loop */
-  for(;;)
-  {
-    HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
-    osDelay(500);
-  }
-  /* USER CODE END StartLed0Task */
-}
+  uint32_t num = 0;
 
-/* USER CODE BEGIN Header_StartLed1Task */
-/**
-  * @brief  Function implementing the led1Task thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartLed1Task */
-void StartLed1Task(void *argument)
-{
-  /* USER CODE BEGIN StartLed1Task */
-  /* Infinite loop */
-  for(;;)
+  while (1)
   {
-    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    if (++num == 5)
+    {
+      // printf("FreeRTOS关闭中断\r\n");
+      portDISABLE_INTERRUPTS(); /* FreeRTOS关闭中断 */
+      delay_busy_ms(5000);      // delay 5s
+      // printf("FreeRTOS打开中断\r\n");
+      portENABLE_INTERRUPTS(); /* FreeRTOS打开中断 */
+      num = 0;
+    }
+
     osDelay(1000);
   }
-  /* USER CODE END StartLed1Task */
+  /* USER CODE END StartFlipIntrpTask */
 }
 
 /* Private application code --------------------------------------------------*/
