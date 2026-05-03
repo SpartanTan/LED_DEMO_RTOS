@@ -22,7 +22,9 @@
         "${workspaceFolder}/Drivers/CMSIS/Include",
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
-        "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"
+        "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
+        "${workspaceFolder}/App/Inc",
+        "${workspaceFolder}/BSP/Inc"
       ],
       "browse": {
         "path": [
@@ -32,7 +34,9 @@
           "${workspaceFolder}/Drivers/CMSIS/Include",
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
-          "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"
+          "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
+          "${workspaceFolder}/App",
+          "${workspaceFolder}/BSP"
         ],
         "limitSymbolsToIncludedHeaders": true
       }
