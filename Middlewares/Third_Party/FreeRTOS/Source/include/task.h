@@ -207,7 +207,7 @@ typedef enum
  * Macro to disable all maskable interrupts.
  *
  * \defgroup taskDISABLE_INTERRUPTS taskDISABLE_INTERRUPTS
- * \ingroupwen ti SchedulerControl
+ * \ingroup SchedulerControl
  */
 #define taskDISABLE_INTERRUPTS()	portDISABLE_INTERRUPTS()
 
