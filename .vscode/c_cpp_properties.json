@@ -24,7 +24,7 @@
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
         "${workspaceFolder}/App/Inc",
-        "${workspaceFolder}/BSP/Inc"
+        "${workspaceFolder}/Drivers/BSP/Inc"
       ],
       "browse": {
         "path": [
@@ -36,7 +36,7 @@
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
           "${workspaceFolder}/App",
-          "${workspaceFolder}/BSP"
+          "${workspaceFolder}/Drivers/BSP"
         ],
         "limitSymbolsToIncludedHeaders": true
       }
