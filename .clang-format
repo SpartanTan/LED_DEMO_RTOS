@@ -14,7 +14,7 @@ AllowShortLoopsOnASingleLine: false
 
 BreakBeforeBraces: Allman
 
-PointerAlignment: Left
+PointerAlignment: Right
 
 SortIncludes: false
 IncludeBlocks: Preserve
