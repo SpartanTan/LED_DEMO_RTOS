@@ -26,7 +26,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+
 #include "interrupt_demo.h"
+#include "lcd.h"
 
 /* USER CODE END Includes */
 
@@ -97,6 +100,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_FSMC_Init();
   /* USER CODE BEGIN 2 */
+  lcd_init();
+  printf("LCD init done\r\n");
 
   /* USER CODE END 2 */
 

@@ -74,6 +74,7 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 App/Src/interrupt_demo.c \
 Drivers/BSP/Src/delay.c \
 Drivers/BSP/Src/retarget.c \
+Drivers/BSP/Src/lcd.c \
 Core/Src/fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_nor.c \
