@@ -61,7 +61,7 @@ const osThreadAttr_t flipIntrpTask_attributes = {
 
 /* USER CODE END FunctionPrototypes */
 
-void StartFlipIntrpTask(void* argument);
+void StartFlipIntrpTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -141,7 +141,7 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartFlipIntrpTask */
-void StartFlipIntrpTask(void* argument)
+void StartFlipIntrpTask(void *argument)
 {
   /* USER CODE BEGIN StartFlipIntrpTask */
   /* Set Priority of TIM3 to 4 */
@@ -155,11 +155,14 @@ void StartFlipIntrpTask(void* argument)
   {
     if (++num == 5)
     {
-      // printf("FreeRTOS关闭中断\r\n");
+      printf("FreeRTOS Disable Interrupt! \r\n");
       portDISABLE_INTERRUPTS(); /* FreeRTOS关闭中断 */
+
       delay_busy_ms(5000);      // delay 5s
-      // printf("FreeRTOS打开中断\r\n");
+      
       portENABLE_INTERRUPTS(); /* FreeRTOS打开中断 */
+      printf("FreeRTOS Enable Interrupt!\r\n");
+      
       num = 0;
     }
 
