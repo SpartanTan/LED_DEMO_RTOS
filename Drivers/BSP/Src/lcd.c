@@ -3,8 +3,11 @@
 #include <stdio.h>
 
 #include "delay.h"
+#include "lcdfont.h"
 
 lcd_dev_t lcddev = {0};
+uint32_t g_point_color = RED;
+uint32_t g_back_color = WHITE;
 
 static void delay_us(uint32_t us)
 {
@@ -49,6 +52,16 @@ void lcd_write_ram_prepare(void)
   LCD->LCD_REG = lcddev.wramcmd;
 }
 
+void lcd_display_on(void)
+{
+  lcd_wr_regno((lcddev.id == 0x5510U) ? 0x2900U : 0x29U);
+}
+
+void lcd_display_off(void)
+{
+  lcd_wr_regno((lcddev.id == 0x5510U) ? 0x2800U : 0x28U);
+}
+
 void lcd_set_cursor(uint16_t x, uint16_t y)
 {
   if (lcddev.id == 0x5510U)
@@ -75,6 +88,124 @@ void lcd_set_cursor(uint16_t x, uint16_t y)
   }
 }
 
+void lcd_scan_dir(uint8_t dir)
+{
+  uint16_t regval = 0U;
+  uint16_t temp;
+
+  if ((lcddev.dir == 1U && lcddev.id != 0x1963U) || (lcddev.dir == 0U && lcddev.id == 0x1963U))
+  {
+    switch (dir)
+    {
+      case L2R_U2D:
+        dir = D2U_L2R;
+        break;
+
+      case L2R_D2U:
+        dir = D2U_R2L;
+        break;
+
+      case R2L_U2D:
+        dir = U2D_L2R;
+        break;
+
+      case R2L_D2U:
+        dir = U2D_R2L;
+        break;
+
+      case U2D_L2R:
+        dir = L2R_D2U;
+        break;
+
+      case U2D_R2L:
+        dir = L2R_U2D;
+        break;
+
+      case D2U_L2R:
+        dir = R2L_D2U;
+        break;
+
+      case D2U_R2L:
+        dir = R2L_U2D;
+        break;
+
+      default:
+        dir = DFT_SCAN_DIR;
+        break;
+    }
+  }
+
+  switch (dir)
+  {
+    case L2R_U2D:
+      regval = 0U;
+      break;
+
+    case L2R_D2U:
+      regval = (1U << 7);
+      break;
+
+    case R2L_U2D:
+      regval = (1U << 6);
+      break;
+
+    case R2L_D2U:
+      regval = (1U << 7) | (1U << 6);
+      break;
+
+    case U2D_L2R:
+      regval = (1U << 5);
+      break;
+
+    case U2D_R2L:
+      regval = (1U << 6) | (1U << 5);
+      break;
+
+    case D2U_L2R:
+      regval = (1U << 7) | (1U << 5);
+      break;
+
+    case D2U_R2L:
+      regval = (1U << 7) | (1U << 6) | (1U << 5);
+      break;
+
+    default:
+      regval = 0U;
+      break;
+  }
+
+  if (lcddev.id == 0x9341U || lcddev.id == 0x7789U || lcddev.id == 0x7796U)
+  {
+    regval |= 0x08U;
+  }
+
+  lcd_write_reg((lcddev.id == 0x5510U) ? 0x3600U : 0x36U, regval);
+
+  if (lcddev.id != 0x1963U)
+  {
+    if ((regval & 0x20U) != 0U)
+    {
+      if (lcddev.width < lcddev.height)
+      {
+        temp = lcddev.width;
+        lcddev.width = lcddev.height;
+        lcddev.height = temp;
+      }
+    }
+    else
+    {
+      if (lcddev.width > lcddev.height)
+      {
+        temp = lcddev.width;
+        lcddev.width = lcddev.height;
+        lcddev.height = temp;
+      }
+    }
+  }
+
+  lcd_set_window(0U, 0U, lcddev.width, lcddev.height);
+}
+
 void lcd_display_dir(uint8_t dir)
 {
   lcddev.dir = dir ? 1U : 0U;
@@ -91,7 +222,6 @@ void lcd_display_dir(uint8_t dir)
     lcddev.setycmd = 0x2B00U;
     lcddev.width = (lcddev.dir == 0U) ? 480U : 800U;
     lcddev.height = (lcddev.dir == 0U) ? 800U : 480U;
-    lcd_write_reg(0x3600U, 0x0000U);
   }
   else if (lcddev.id == 0x9806U)
   {
@@ -109,7 +239,7 @@ void lcd_display_dir(uint8_t dir)
     lcddev.height = (lcddev.dir == 0U) ? 320U : 240U;
   }
 
-  lcd_set_window(0U, 0U, lcddev.width, lcddev.height);
+  lcd_scan_dir(DFT_SCAN_DIR);
 }
 
 void lcd_ssd_backlight_set(uint8_t pwm)
@@ -170,6 +300,181 @@ void lcd_set_window(uint16_t sx, uint16_t sy, uint16_t width, uint16_t height)
     lcd_wr_data((uint16_t)(sy & 0xFFU));
     lcd_wr_data((uint16_t)(ey >> 8));
     lcd_wr_data((uint16_t)(ey & 0xFFU));
+  }
+}
+
+void lcd_draw_point(uint16_t x, uint16_t y, uint32_t color)
+{
+  if ((x >= lcddev.width) || (y >= lcddev.height))
+  {
+    return;
+  }
+
+  lcd_set_cursor(x, y);
+  lcd_write_ram_prepare();
+  LCD->LCD_RAM = (uint16_t)color;
+}
+
+void lcd_show_char(uint16_t x, uint16_t y, char chr, uint8_t size, uint8_t mode, uint16_t color)
+{
+  uint8_t temp;
+  uint8_t t1;
+  uint8_t t;
+  uint16_t y0 = y;
+  uint8_t csize;
+  const uint8_t *pfont = NULL;
+
+  if ((chr < ' ') || (chr > '~'))
+  {
+    return;
+  }
+
+  csize = (uint8_t)((size / 8U + ((size % 8U) ? 1U : 0U)) * (size / 2U));
+  chr = (char)(chr - ' ');
+
+  switch (size)
+  {
+    case 12:
+      pfont = asc2_1206[(uint8_t)chr];
+      break;
+
+    case 16:
+      pfont = asc2_1608[(uint8_t)chr];
+      break;
+
+    case 24:
+      pfont = asc2_2412[(uint8_t)chr];
+      break;
+
+    case 32:
+      pfont = asc2_3216[(uint8_t)chr];
+      break;
+
+    default:
+      return;
+  }
+
+  for (t = 0; t < csize; t++)
+  {
+    temp = pfont[t];
+
+    for (t1 = 0; t1 < 8U; t1++)
+    {
+      if ((temp & 0x80U) != 0U)
+      {
+        lcd_draw_point(x, y, color);
+      }
+      else if (mode == 0U)
+      {
+        lcd_draw_point(x, y, g_back_color);
+      }
+
+      temp <<= 1;
+      y++;
+
+      if (y >= lcddev.height)
+      {
+        return;
+      }
+
+      if ((y - y0) == size)
+      {
+        y = y0;
+        x++;
+
+        if (x >= lcddev.width)
+        {
+          return;
+        }
+
+        break;
+      }
+    }
+  }
+}
+
+static uint32_t lcd_pow(uint8_t m, uint8_t n)
+{
+  uint32_t result = 1U;
+
+  while (n-- != 0U)
+  {
+    result *= m;
+  }
+
+  return result;
+}
+
+void lcd_show_num(uint16_t x, uint16_t y, uint32_t num, uint8_t len, uint8_t size, uint16_t color)
+{
+  uint8_t t;
+  uint8_t temp;
+  uint8_t enshow = 0U;
+
+  for (t = 0; t < len; t++)
+  {
+    temp = (uint8_t)((num / lcd_pow(10U, (uint8_t)(len - t - 1U))) % 10U);
+
+    if ((enshow == 0U) && (t < (len - 1U)))
+    {
+      if (temp == 0U)
+      {
+        lcd_show_char((uint16_t)(x + (size / 2U) * t), y, ' ', size, 0U, color);
+        continue;
+      }
+
+      enshow = 1U;
+    }
+
+    lcd_show_char((uint16_t)(x + (size / 2U) * t), y, (char)(temp + '0'), size, 0U, color);
+  }
+}
+
+void lcd_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, uint8_t size, uint8_t mode, uint16_t color)
+{
+  uint8_t t;
+  uint8_t temp;
+  uint8_t enshow = 0U;
+
+  for (t = 0; t < len; t++)
+  {
+    temp = (uint8_t)((num / lcd_pow(10U, (uint8_t)(len - t - 1U))) % 10U);
+
+    if ((enshow == 0U) && (t < (len - 1U)) && (temp == 0U))
+    {
+      lcd_show_char((uint16_t)(x + (size / 2U) * t), y, ((mode & 0x80U) ? '0' : ' '), size,
+                    (uint8_t)(mode & 0x01U), color);
+      continue;
+    }
+
+    enshow = 1U;
+    lcd_show_char((uint16_t)(x + (size / 2U) * t), y, (char)(temp + '0'), size,
+                  (uint8_t)(mode & 0x01U), color);
+  }
+}
+
+void lcd_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t size, char *p, uint16_t color)
+{
+  uint16_t x0 = x;
+  width = (uint16_t)(width + x);
+  height = (uint16_t)(height + y);
+
+  while ((*p <= '~') && (*p >= ' '))
+  {
+    if (x >= width)
+    {
+      x = x0;
+      y = (uint16_t)(y + size);
+    }
+
+    if (y >= height)
+    {
+      break;
+    }
+
+    lcd_show_char(x, y, *p, size, 0U, color);
+    x = (uint16_t)(x + size / 2U);
+    p++;
   }
 }
 

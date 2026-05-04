@@ -101,6 +101,7 @@ int main(void)
   MX_FSMC_Init();
   /* USER CODE BEGIN 2 */
   lcd_init();
+  lcd_show_string(40, 40, 360, 40, 32, "Hello World", BLUE);
   printf("LCD init done\r\n");
 
   /* USER CODE END 2 */
