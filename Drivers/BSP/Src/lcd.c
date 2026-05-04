@@ -3,24 +3,12 @@
 #include <stdio.h>
 
 #include "delay.h"
+#include "lcd_ex.h"
 #include "lcdfont.h"
 
 lcd_dev_t lcddev = {0};
 uint32_t g_point_color = RED;
 uint32_t g_back_color = WHITE;
-
-static void delay_us(uint32_t us)
-{
-  while (us-- != 0U)
-  {
-    delay_busy_cycles(SystemCoreClock / 3000000U);
-  }
-}
-
-#define delay_ms delay_busy_ms
-
-/* Pull in vendor IC register init sequences used by lcd_init(). */
-#include "lcd_ex.c"
 
 void lcd_wr_data(volatile uint16_t data)
 {

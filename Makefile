@@ -72,9 +72,11 @@ Core/Src/tim.c \
 Core/Src/usart.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 App/Src/interrupt_demo.c \
+App/Src/lcd_demo.c \
 Drivers/BSP/Src/delay.c \
-Drivers/BSP/Src/retarget.c \
 Drivers/BSP/Src/lcd.c \
+Drivers/BSP/Src/lcd_ex.c \
+Drivers/BSP/Src/retarget.c \
 Core/Src/fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_nor.c \
@@ -150,7 +152,7 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 \
 -IApp/Inc \
--IDrivers/BSP/Inc
+-IDrivers/BSP/Inc \
 
 
 # compile gcc flags

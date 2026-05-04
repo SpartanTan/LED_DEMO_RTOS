@@ -28,3 +28,16 @@ void delay_busy_ms(uint32_t ms)
     delay_busy_cycles(cycles_per_ms);
   }
 }
+
+void delay_ms(uint32_t ms)
+{
+  delay_busy_ms(ms);
+}
+
+void delay_us(uint32_t us)
+{
+  while (us-- != 0U)
+  {
+    delay_busy_cycles(SystemCoreClock / 3000000U);
+  }
+}
