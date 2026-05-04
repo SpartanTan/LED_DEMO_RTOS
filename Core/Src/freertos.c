@@ -26,7 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "interrupt_demo.h"
-#include "lcd_demo.h"
+#include "lvgl_demo.h"
 #include "tim.h"
 #include "delay.h"
 /* USER CODE END Includes */
@@ -173,10 +173,7 @@ void StartlvglTask(void *argument)
 {
   /* USER CODE BEGIN StartlvglTask */
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  lvgl_demo_task(argument);
   /* USER CODE END StartlvglTask */
 }
 

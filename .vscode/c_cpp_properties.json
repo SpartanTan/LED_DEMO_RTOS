@@ -23,6 +23,9 @@
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
         "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
+        "${workspaceFolder}/Middlewares/Third_Party/LVGL",
+        "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl",
+        "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl/src",
         "${workspaceFolder}/App/Inc",
         "${workspaceFolder}/Drivers/BSP/Inc"
       ],
@@ -35,6 +38,8 @@
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
+          "${workspaceFolder}/Middlewares/Third_Party/LVGL",
+          "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl",
           "${workspaceFolder}/App",
           "${workspaceFolder}/Drivers/BSP"
         ],

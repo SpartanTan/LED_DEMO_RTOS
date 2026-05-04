@@ -100,13 +100,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_FSMC_Init();
   /* USER CODE BEGIN 2 */
-  char lcd_id_line[32];
-
   lcd_init();
-  lcd_show_string(40, 40, 360, 40, 32, "Hello World", BLUE);
-  snprintf(lcd_id_line, sizeof(lcd_id_line), "LCD ID: %04lX", (unsigned long)lcddev.id);
-  lcd_show_string(40, 90, 360, 24, 24, lcd_id_line, RED);
-  printf("LCD init done\r\n");
+  printf("LCD init done, ID: %04lX\r\n", (unsigned long)lcddev.id);
 
   /* USER CODE END 2 */
 

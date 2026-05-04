@@ -73,6 +73,7 @@ Core/Src/usart.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 App/Src/interrupt_demo.c \
 App/Src/lcd_demo.c \
+App/Src/lvgl_demo.c \
 Drivers/BSP/Src/delay.c \
 Drivers/BSP/Src/lcd.c \
 Drivers/BSP/Src/lcd_ex.c \
@@ -90,6 +91,20 @@ startup_stm32f103xe.s
 
 # ASMM sources
 ASMM_SOURCES = 
+
+#######################################
+# LVGL
+#######################################
+LVGL_PATH = Middlewares/Third_Party/LVGL/lvgl
+include $(LVGL_PATH)/lvgl.mk
+
+LVGL_C_SOURCES = $(filter-out \
+$(LVGL_PATH)/examples/% \
+$(LVGL_PATH)/demos/% \
+$(LVGL_PATH)/src/debugging/vg_lite_tvg/vg_lite_matrix.c, \
+$(CSRCS))
+
+C_SOURCES += $(LVGL_C_SOURCES)
 
 
 
@@ -152,7 +167,10 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 \
 -IApp/Inc \
--IDrivers/BSP/Inc
+-IDrivers/BSP/Inc \
+-IMiddlewares/Third_Party/LVGL \
+-IMiddlewares/Third_Party/LVGL/lvgl \
+-IMiddlewares/Third_Party/LVGL/lvgl/src
 
 
 # compile gcc flags
