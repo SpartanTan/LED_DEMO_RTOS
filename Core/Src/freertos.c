@@ -57,11 +57,11 @@ const osThreadAttr_t sumupTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for lcdTask */
-osThreadId_t lcdTaskHandle;
-const osThreadAttr_t lcdTask_attributes = {
-  .name = "lcdTask",
-  .stack_size = 512 * 4,
+/* Definitions for lvglTask */
+osThreadId_t lvglTaskHandle;
+const osThreadAttr_t lvglTask_attributes = {
+  .name = "lvglTask",
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
@@ -71,7 +71,7 @@ const osThreadAttr_t lcdTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartSumupTask(void *argument);
-void StartLcdTask(void *argument);
+void StartlvglTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -134,8 +134,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of sumupTask */
   sumupTaskHandle = osThreadNew(StartSumupTask, NULL, &sumupTask_attributes);
 
-  /* creation of lcdTask */
-  lcdTaskHandle = osThreadNew(StartLcdTask, NULL, &lcdTask_attributes);
+  /* creation of lvglTask */
+  lvglTaskHandle = osThreadNew(StartlvglTask, NULL, &lvglTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -162,19 +162,22 @@ void StartSumupTask(void *argument)
   /* USER CODE END StartSumupTask */
 }
 
-/* USER CODE BEGIN Header_StartLcdTask */
+/* USER CODE BEGIN Header_StartlvglTask */
 /**
-* @brief Function implementing the lcdTask thread.
+* @brief Function implementing the lvglTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartLcdTask */
-void StartLcdTask(void *argument)
+/* USER CODE END Header_StartlvglTask */
+void StartlvglTask(void *argument)
 {
-  /* USER CODE BEGIN StartLcdTask */
+  /* USER CODE BEGIN StartlvglTask */
   /* Infinite loop */
-  lcd_demo_task(argument);
-  /* USER CODE END StartLcdTask */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartlvglTask */
 }
 
 /* Private application code --------------------------------------------------*/
