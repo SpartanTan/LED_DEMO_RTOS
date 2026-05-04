@@ -9,30 +9,21 @@
 #include "task.h"
 #include "tim.h"
 
+static volatile uint32_t tim3_count = 0;
+static volatile uint32_t tim5_count = 0;
+static uint32_t total_count = 0;
+
 void interrupt_demo_task(void *argument)
 {
-  HAL_NVIC_SetPriority(TIM3_IRQn, 4, 0);
+  (void)argument;
+
   HAL_TIM_Base_Start_IT(&htim3);
   HAL_TIM_Base_Start_IT(&htim5);
 
-  uint32_t num = 0;
-
   while (1)
   {
-    if (++num == 5)
-    {
-      printf("FreeRTOS Disable Interrupt!\r\n");
-      portDISABLE_INTERRUPTS();
-
-      delay_busy_ms(5000);
-
-      portENABLE_INTERRUPTS();
-      printf("FreeRTOS Enable Interrupt!\r\n");
-
-      num = 0;
-    }
-
-    osDelay(1000);
+    total_count = tim3_count + tim5_count;
+    osDelay(200);
   }
 }
 
@@ -40,13 +31,28 @@ void interrupt_demo_tim_period_elapsed_callback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM3)
   {
-    printf("TIM3 Interrupt triggered!\r\n");
-
+    tim3_count++;
+    // printf("TIM3 Interrupt triggered!\r\n");
     HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
   }
   else if (htim->Instance == TIM5)
   {
-    printf("TIM5 Interrupt triggered!\r\n");
+    tim5_count++;
+    // printf("TIM5 Interrupt triggered!\r\n");
     HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
   }
+}
+
+void interrupt_demo_get_stats(interrupt_demo_stats_t *stats)
+{
+  if (stats == NULL)
+  {
+    return;
+  }
+
+  taskENTER_CRITICAL();
+  stats->tim3 = tim3_count;
+  stats->tim5 = tim5_count;
+  stats->total = total_count;
+  taskEXIT_CRITICAL();
 }

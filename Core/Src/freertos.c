@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "interrupt_demo.h"
+#include "lcd_demo.h"
 #include "tim.h"
 #include "delay.h"
 /* USER CODE END Includes */
@@ -49,11 +50,18 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for flipIntrpTask */
-osThreadId_t flipIntrpTaskHandle;
-const osThreadAttr_t flipIntrpTask_attributes = {
-  .name = "flipIntrpTask",
+/* Definitions for sumupTask */
+osThreadId_t sumupTaskHandle;
+const osThreadAttr_t sumupTask_attributes = {
+  .name = "sumupTask",
   .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for lcdTask */
+osThreadId_t lcdTaskHandle;
+const osThreadAttr_t lcdTask_attributes = {
+  .name = "lcdTask",
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
@@ -62,7 +70,8 @@ const osThreadAttr_t flipIntrpTask_attributes = {
 
 /* USER CODE END FunctionPrototypes */
 
-void StartFlipIntrpTask(void *argument);
+void StartSumupTask(void *argument);
+void StartLcdTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -122,8 +131,11 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of flipIntrpTask */
-  flipIntrpTaskHandle = osThreadNew(StartFlipIntrpTask, NULL, &flipIntrpTask_attributes);
+  /* creation of sumupTask */
+  sumupTaskHandle = osThreadNew(StartSumupTask, NULL, &sumupTask_attributes);
+
+  /* creation of lcdTask */
+  lcdTaskHandle = osThreadNew(StartLcdTask, NULL, &lcdTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -135,18 +147,34 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartFlipIntrpTask */
+/* USER CODE BEGIN Header_StartSumupTask */
 /**
-  * @brief  Function implementing the flipIntrpTask thread.
+  * @brief  Function implementing the sumupTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartFlipIntrpTask */
-void StartFlipIntrpTask(void *argument)
+/* USER CODE END Header_StartSumupTask */
+void StartSumupTask(void *argument)
 {
-  /* USER CODE BEGIN StartFlipIntrpTask */
+  /* USER CODE BEGIN StartSumupTask */
+  /* Infinite loop */
   interrupt_demo_task(argument);
-  /* USER CODE END StartFlipIntrpTask */
+  /* USER CODE END StartSumupTask */
+}
+
+/* USER CODE BEGIN Header_StartLcdTask */
+/**
+* @brief Function implementing the lcdTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartLcdTask */
+void StartLcdTask(void *argument)
+{
+  /* USER CODE BEGIN StartLcdTask */
+  /* Infinite loop */
+  lcd_demo_task(argument);
+  /* USER CODE END StartLcdTask */
 }
 
 /* Private application code --------------------------------------------------*/
