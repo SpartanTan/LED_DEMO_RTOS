@@ -13,23 +13,24 @@ void lcd_demo_task(void *argument)
 
   uint32_t tick = osKernelGetTickCount();
 
+  lcd_show_string(40, 140, 80, 24, 24, "TIM3:", BLUE);
+  lcd_show_string(40, 180, 80, 24, 24, "TIM5:", BLUE);
+  lcd_show_string(40, 220, 100, 24, 24, "TOTAL:", RED);
+
   for (;;)
   {
     interrupt_demo_get_stats(&stats);
 
-    snprintf(line, sizeof(line), "TIM3: %lu", stats.tim3);
-    lcd_show_string(40, 100, 300, 24, 24, "                    ", WHITE);
-    lcd_show_string(40, 100, 300, 24, 24, line, BLUE);
+    snprintf(line, sizeof(line), "%lu", stats.tim3);
+    lcd_show_string(130, 140, 160, 24, 24, line, BLUE);
 
-    snprintf(line, sizeof(line), "TIM5: %lu", stats.tim5);
-    lcd_show_string(40, 140, 300, 24, 24, "                    ", WHITE);
-    lcd_show_string(40, 140, 300, 24, 24, line, BLUE);
+    snprintf(line, sizeof(line), "%lu", stats.tim5);
+    lcd_show_string(130, 180, 160, 24, 24, line, BLUE);
 
-    snprintf(line, sizeof(line), "TOTAL: %lu", stats.total);
-    lcd_show_string(40, 180, 300, 24, 24, "                    ", WHITE);
-    lcd_show_string(40, 180, 300, 24, 24, line, RED);
+    snprintf(line, sizeof(line), "%lu", stats.total);
+    lcd_show_string(130, 220, 160, 24, 24, line, RED);
 
-    tick += 500;
+    tick += 100;
     osDelayUntil(tick);
   }
 }

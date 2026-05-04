@@ -562,8 +562,6 @@ void lcd_init(void)
     }
   }
 
-  printf("LCD ID:%x\r\n", lcddev.id);
-
   if (lcddev.id == 0x7789U)
   {
     lcd_ex_st7789_reginit();
