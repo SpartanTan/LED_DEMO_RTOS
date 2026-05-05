@@ -27,6 +27,7 @@
         "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl",
         "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl/src",
         "${workspaceFolder}/App/Inc",
+        "${workspaceFolder}/App/UI/src/ui",
         "${workspaceFolder}/Drivers/BSP/Inc"
       ],
       "browse": {
@@ -40,7 +41,9 @@
           "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
           "${workspaceFolder}/Middlewares/Third_Party/LVGL",
           "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl",
+          "${workspaceFolder}/Middlewares/Third_Party/LVGL/lvgl/src",
           "${workspaceFolder}/App",
+          "${workspaceFolder}/App/UI",
           "${workspaceFolder}/Drivers/BSP"
         ],
         "limitSymbolsToIncludedHeaders": true
