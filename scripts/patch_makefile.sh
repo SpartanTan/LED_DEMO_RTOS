@@ -9,9 +9,18 @@ if [[ ! -f "$makefile" ]]; then
 fi
 
 shopt -s nullglob
-sources=(App/Src/*.c Drivers/BSP/Src/*.c)
+source_dirs=(App/Src Drivers/BSP/Src App/UI)
+sources=()
+for source_dir in "${source_dirs[@]}"; do
+  [[ -d "$source_dir" ]] || continue
+  while IFS= read -r source_file; do
+    sources+=("$source_file")
+  done < <(find "$source_dir" -type f -name '*.c' | sort)
+done
+
 includes=()
 [[ -d App/Inc ]] && includes+=("-IApp/Inc")
+[[ -d App/UI/src/ui ]] && includes+=("-IApp/UI/src/ui")
 [[ -d Drivers/BSP/Inc ]] && includes+=("-IDrivers/BSP/Inc")
 
 source_anchor="Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c"
@@ -32,7 +41,7 @@ emit_inserted_block() {
 
 while IFS= read -r line || [[ -n "$line" ]]; do
   case "$line" in
-    App/Src/*.c*|BSP/Src/*.c*|Drivers/BSP/Src/*.c*|-IApp/Inc*|-IBSP/Inc*|-IDrivers/BSP/Inc*)
+    App/Src/*.c*|App/UI/*|BSP/Src/*.c*|Drivers/BSP/Src/*.c*|-IApp/Inc*|-IApp/UI*|-IBSP/Inc*|-IDrivers/BSP/Inc*)
       continue
       ;;
   esac
