@@ -78,6 +78,10 @@ Drivers/BSP/Src/delay.c \
 Drivers/BSP/Src/lcd.c \
 Drivers/BSP/Src/lcd_ex.c \
 Drivers/BSP/Src/retarget.c \
+App/UI/src/ui/images.c \
+App/UI/src/ui/screens.c \
+App/UI/src/ui/styles.c \
+App/UI/src/ui/ui.c \
 Core/Src/fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_fsmc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_nor.c \
@@ -167,6 +171,7 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 \
 -IApp/Inc \
+-IApp/UI/src/ui \
 -IDrivers/BSP/Inc \
 -IMiddlewares/Third_Party/LVGL \
 -IMiddlewares/Third_Party/LVGL/lvgl \
