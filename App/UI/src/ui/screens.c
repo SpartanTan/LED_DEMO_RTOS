@@ -35,6 +35,12 @@ void create_screen_main() {
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text_static(obj, "Hello, world!");
         }
+        {
+            lv_obj_t *obj = lv_arc_create(parent_obj);
+            lv_obj_set_pos(obj, 488, 165);
+            lv_obj_set_size(obj, 150, 150);
+            lv_arc_set_value(obj, 25);
+        }
     }
     
     tick_screen_main();

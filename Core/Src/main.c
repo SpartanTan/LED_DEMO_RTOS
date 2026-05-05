@@ -101,6 +101,7 @@ int main(void)
   MX_FSMC_Init();
   /* USER CODE BEGIN 2 */
   lcd_init();
+  lcd_display_dir(1U);
   printf("LCD init done, ID: %04lX\r\n", (unsigned long)lcddev.id);
 
   /* USER CODE END 2 */
