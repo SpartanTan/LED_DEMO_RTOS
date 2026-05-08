@@ -11,18 +11,40 @@ extern "C" {
 
 enum ScreensEnum {
     _SCREEN_ID_FIRST = 1,
-    SCREEN_ID_MAIN = 1,
+    SCREEN_ID_MENU = 1,
     _SCREEN_ID_LAST = 1
 };
 
 typedef struct _objects_t {
-    lv_obj_t *main;
+    lv_obj_t *menu;
+    lv_obj_t *obj0;
+    lv_obj_t *obj1;
+    lv_obj_t *label_speed;
+    lv_obj_t *indicator1;
+    lv_obj_t *table;
+    lv_obj_t *obj2;
+    lv_obj_t *rpm_value;
+    lv_obj_t *bestlap;
+    lv_obj_t *currentlap;
+    lv_obj_t *bestlap_time;
+    lv_obj_t *bestlap_time_1;
+    lv_obj_t *battery_bar;
+    lv_obj_t *battery_main;
+    lv_obj_t *obj3;
+    lv_obj_t *battery_head;
+    lv_obj_t *battery_value;
+    lv_obj_t *cpu;
+    lv_obj_t *cpu_value;
+    lv_obj_t *fps;
+    lv_obj_t *fps_value;
+    lv_obj_t *obj4;
+    lv_obj_t *obj5;
 } objects_t;
 
 extern objects_t objects;
 
-void create_screen_main();
-void tick_screen_main();
+void create_screen_menu();
+void tick_screen_menu();
 
 void tick_screen_by_id(enum ScreensEnum screenId);
 void tick_screen(int screen_index);

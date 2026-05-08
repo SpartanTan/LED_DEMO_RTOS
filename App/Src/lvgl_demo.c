@@ -18,6 +18,8 @@ static void lvgl_lcd_flush_cb(lv_display_t *disp, const lv_area_t *area, uint8_t
   const int32_t width = area->x2 - area->x1 + 1;
   const int32_t height = area->y2 - area->y1 + 1;
   const uint16_t *color = (const uint16_t *)px_map;
+  // printf("flush: x=%ld..%ld y=%ld..%ld\r\n",
+  //        area->x1, area->x2, area->y1, area->y2);
 
   if ((width <= 0) || (height <= 0))
   {

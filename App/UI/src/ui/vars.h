@@ -18,6 +18,9 @@ enum FlowGlobalVariables {
 
 // Native global variables
 
+extern int32_t get_var_progress();
+extern void set_var_progress(int32_t value);
+
 #ifdef __cplusplus
 }
 #endif
